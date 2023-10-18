@@ -1,5 +1,3 @@
-# miDbPet/docker-compose.yml
-
 version: '3.8'
 
 services:
@@ -14,7 +12,16 @@ services:
       - mongodb_data:/data/db
       
   init_and_seed_db:
-    build: .  # Construir imagen usando el Dockerfile presente en el directorio actual
+    build: .  
+    environment:
+      - MONGODB_URI=mongodb://admin:adminPassword@mongodb:27017/petFeederDB
+    depends_on:
+      - mongodb
+
+  petfeederapi:
+    image: petfeederapi:latest
+    ports:
+      - "3000:3000"
     environment:
       - MONGODB_URI=mongodb://admin:adminPassword@mongodb:27017/petFeederDB
     depends_on:
